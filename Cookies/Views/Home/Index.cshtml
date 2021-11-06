@@ -1,0 +1,84 @@
+﻿@model Cookies.Models.Cookie
+
+@{
+    ViewData["Title"] = "Cookie visualizer";
+}
+
+<div>
+    <h1>Cookie visualizer</h1>
+    @{
+        @if (Context.Request.Cookies.Count == 0)
+        {
+            <h3>No cookies</h3>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                    
+                        <th>
+                            @Html.DisplayNameFor(model => model.CookieName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CookieValue)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (KeyValuePair<string, string> cookie in Context.Request.Cookies)
+                    {
+                        <tr>
+                          
+                            <td>@cookie.Key</td>
+                            <td>@cookie.Value</td>
+                            <td>
+                                @Html.ActionLink("delete", "DeleteCookie", new { cookiename = @cookie.Key })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+          
+        }
+
+
+        @*<form method="post" asp-action="CreateCookie">
+                <h2>Create new cookie</h2>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <label asp-for="CookieName">New cookie name</label>
+                <input name="CookieName" type="text" />
+                <br /><label for="CookieValue">New cookie value</label>
+                <input name="CookieValue" type="text" />
+                <br /><input type="submit" value="Add cookie" />
+            </form>*@
+    }
+</div>
+
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateCookie">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CookieName" class="control-label"></label>
+                <input asp-for="CookieName" class="form-control" />
+                <span asp-validation-for="CookieName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CookieValue" class="control-label"></label>
+                <input asp-for="CookieValue" class="form-control"/>
+                <span asp-validation-for="CookieValue" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
